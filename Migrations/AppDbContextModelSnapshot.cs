@@ -23,15 +23,15 @@ namespace quandomeutimejoga_server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("fullName")
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("initials")
+                    b.Property<string>("Initials")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("shortName")
+                    b.Property<string>("ShortName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

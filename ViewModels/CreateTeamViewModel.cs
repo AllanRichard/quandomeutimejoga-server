@@ -6,25 +6,32 @@ namespace quandomeutimejoga_server.ViewModels
 {
     public class CreateTeamViewModel : Notifiable<Notification>
     {
-        public string fullName { get; set; } 
-        public string shortName { get; set; }
-        public string initials { get; set; }  
+        public string FullName { get; set; }
+        public string ShortName { get; set; }
+        public string Initials { get; set; }
+
+        public CreateTeamViewModel(string fullName, string shortName, string initials)
+        {
+            FullName = fullName;
+            ShortName = shortName; 
+            Initials = initials;
+        }
 
         public Team MapTo()
         {
             AddNotifications(new Contract<Notification>()
                 .Requires()
-                .IsNotNull(fullName, "Informe o nome completo do Time")
-                .IsGreaterOrEqualsThan(fullName, 3, "O nome completo deve ter no mínimo 3 caracteres")
-                .IsLowerOrEqualsThan(fullName, 100, "O nome completo deve ter no máximo 100 caracteres")
-                .IsNotNull(shortName,  "Informe o nome curto do Time")
-                .IsGreaterOrEqualsThan(shortName, 3, "O nome curto deve ter no mínimo 3 caracteres")
-                .IsLowerOrEqualsThan(shortName, 50, "O nome curto deve ter no máximo 50 caracteres")
-                .IsNotNull(initials, "Informe as iniciais do Time")
-                .IsGreaterOrEqualsThan(shortName, 3, "As iniciais devem ter no mínimo 3 caracteres")
-                .IsLowerOrEqualsThan(shortName, 10, "As iniciais devem ter no máximo 10 caracteres"));
+                .IsNotNull(FullName, "Nome completo do time não pode ser vazio")
+                .IsGreaterOrEqualsThan(FullName, 5, "Nome completo do time deve ter 5 ou mais caracteres")
+                .IsLowerOrEqualsThan(FullName, 100, "Nome completo do time deve ter 100 caracteres no máximo")
+                .IsNotNull(ShortName, "Nome popular do time não pode ser vazio")
+                .IsGreaterOrEqualsThan(ShortName, 5, "Nome popular do time deve ter 5 ou mais caracteres")
+                .IsLowerOrEqualsThan(ShortName, 50, "Nome popular do time deve ter 50 caracteres no máximo")
+                .IsNotNull(Initials, "As Iniciais do time não pode ser vazio")
+                .IsGreaterOrEqualsThan(Initials, 3, "As Iniciais do time deve ter 3 ou mais caracteres")
+                .IsLowerOrEqualsThan(Initials, 10, "As Iniciais do time deve ter 10 caracteres no máximo"));
 
-            return new Team(Guid.NewGuid(), fullName, shortName, initials);
+            return new Team(Guid.NewGuid(), FullName, ShortName, Initials);
         }
     }
 }
