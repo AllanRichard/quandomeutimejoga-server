@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using quandomeutimejoga_server.Data;
 
 var builder = WebApplication.CreateBuilder(args);

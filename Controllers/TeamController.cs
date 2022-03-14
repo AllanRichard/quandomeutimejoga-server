@@ -31,34 +31,34 @@ namespace quandomeutimejoga_server.Controllers
             return team is not null ? Ok(team) : NotFound();
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateTeam(Guid id, Team model)
-        //{
-        //    //var team = model.MapTo();
-        //    //if (!model.IsValid)
-        //    //    return BadRequest(model.Notifications);
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTeam(Guid id, UpdateTeamViewModel model)
+        {
+            var team = model.MapTo();
+            if (!model.IsValid)
+                return BadRequest(model.Notifications);
 
-        //    var team = await _context.Teams.FindAsync(id);
-        //    if (team == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var update = await _context.Teams.FindAsync(id);
+            if (update == null)
+            {
+                return NotFound();
+            }
 
-        //    findTeamById.FullName = team.FullName;
-        //    findTeamById.ShortName = team.ShortName;
-        //    findTeamById.Initials = team.Initials;
+            update.FullName = team.FullName;
+            update.ShortName = team.ShortName;
+            update.Initials = team.Initials;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        return BadRequest();
-        //    }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) when (!TeamExists(id))
+            {
+                return BadRequest();
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateTeam(CreateTeamViewModel model)
@@ -67,10 +67,30 @@ namespace quandomeutimejoga_server.Controllers
             if (!model.IsValid)
                 return BadRequest(model.Notifications);
 
-            await _context.AddAsync(team);
+            _context.Add(team);
             await _context.SaveChangesAsync();
 
             return Created($"/v1/teams/{team.Id}", team);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveTeam(Guid id)
+        {
+            var team = await _context.Teams.FindAsync(id);
+            if (team == null)
+            {
+                return NotFound();
+            }
+
+            _context.Teams.Remove(team);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool TeamExists(Guid id)
+        {
+            return _context.Teams.Any(t => t.Id == id);
         }
     }
 }
