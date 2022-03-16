@@ -1,23 +1,22 @@
 ﻿using Flunt.Notifications;
 using Flunt.Validations;
-using quandomeutimejoga_server.Models;
 
-namespace quandomeutimejoga_server.ViewModels
+namespace quandomeutimejoga_server.ViewModels.TeamView
 {
-    public class CreateTeamViewModel : Notifiable<Notification>
+    public class UpdateTeamViewModel : Notifiable<Notification>
     {
         public string FullName { get; set; }
         public string ShortName { get; set; }
         public string Initials { get; set; }
 
-        public CreateTeamViewModel(string fullName, string shortName, string initials)
+        public UpdateTeamViewModel(string fullName, string shortName, string initials)
         {
             FullName = fullName;
-            ShortName = shortName; 
+            ShortName = shortName;
             Initials = initials;
         }
 
-        public Team MapTo()
+        public UpdateTeamViewModel MapTo()
         {
             AddNotifications(new Contract<Notification>()
                 .Requires()
@@ -31,7 +30,7 @@ namespace quandomeutimejoga_server.ViewModels
                 .IsGreaterOrEqualsThan(Initials, 3, "As Iniciais do time deve ter 3 ou mais caracteres")
                 .IsLowerOrEqualsThan(Initials, 10, "As Iniciais do time deve ter 10 caracteres no máximo"));
 
-            return new Team(Guid.NewGuid(), FullName, ShortName, Initials);
+            return new UpdateTeamViewModel(FullName, ShortName, Initials);
         }
     }
 }

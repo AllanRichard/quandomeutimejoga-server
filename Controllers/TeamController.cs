@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using quandomeutimejoga_server.Data;
 using quandomeutimejoga_server.Models;
-using quandomeutimejoga_server.ViewModels;
+using quandomeutimejoga_server.ViewModels.TeamView;
 
 namespace quandomeutimejoga_server.Controllers
 {
@@ -67,7 +67,7 @@ namespace quandomeutimejoga_server.Controllers
             if (!model.IsValid)
                 return BadRequest(model.Notifications);
 
-            _context.Add(team);
+            _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
             return Created($"/v1/teams/{team.Id}", team);
