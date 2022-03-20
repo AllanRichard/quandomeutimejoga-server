@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using quandomeutimejoga_server.Data;
 using quandomeutimejoga_server.Models;
-using quandomeutimejoga_server.ViewModels.CountryView;
+using quandomeutimejoga_server.Models.Views;
 
 namespace quandomeutimejoga_server.Controllers
 {
@@ -32,11 +32,11 @@ namespace quandomeutimejoga_server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCountry(Guid id, UpdateCountryViewModel model)
+        public async Task<IActionResult> UpdateCountry(Guid id, CountryView model)
         {
-            var country = model.MapTo();
-            if (!model.IsValid)
-                return BadRequest(model.Notifications);
+            var validations = model.Validations();
+            if (validations.Count > 0)
+                return BadRequest(validations);
 
             var updateCountry = await _context.Countries.FindAsync(id);
             if (updateCountry == null)
@@ -44,9 +44,9 @@ namespace quandomeutimejoga_server.Controllers
                 return NotFound();
             }
 
-            updateCountry.Name = country.Name; 
-            updateCountry.CountryCode = country.CountryCode;
-            updateCountry.Continent = country.Continent;
+            updateCountry.Name = model.Name;
+            updateCountry.CountryCode = model.CountryCode;
+            updateCountry.Continent = (Models.Enums.Continent)model.Continent;
 
             try
             {
@@ -61,11 +61,17 @@ namespace quandomeutimejoga_server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCountry(CreateCountryViewModel model)
+        public async Task<IActionResult> CreateCountry(CountryView model)
         {
-            var country = model.MapTo();
-            if (!model.IsValid)
-                return BadRequest(model.Notifications);
+            var validations = model.Validations();
+            if (validations.Count > 0)
+                return BadRequest(validations);
+
+            var country = new Country();
+            country.Id = new Guid();
+            country.Name = model.Name;
+            country.CountryCode = model.CountryCode;
+            country.Continent = (Models.Enums.Continent)model.Continent;
 
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();

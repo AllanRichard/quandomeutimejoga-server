@@ -17,27 +17,214 @@ namespace quandomeutimejoga_server.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
 
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Competition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Season")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TypeCompetition")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Competitions");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.CompetitionTeam", b =>
+                {
+                    b.Property<Guid>("CompetitionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CompetitionId", "TeamId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("CompetitionTeams");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Country", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Continent")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CountryCode")
+                        .HasMaxLength(4)
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Organization", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Organizations");
+                });
+
             modelBuilder.Entity("quandomeutimejoga_server.Models.Team", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Initials")
                         .IsRequired()
+                        .HasMaxLength(5)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ShortName")
                         .IsRequired()
+                        .HasMaxLength(80)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CountryId");
+
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Competition", b =>
+                {
+                    b.HasOne("quandomeutimejoga_server.Models.Country", "Country")
+                        .WithMany("Competitions")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("quandomeutimejoga_server.Models.Organization", "Organization")
+                        .WithMany("Competitions")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.CompetitionTeam", b =>
+                {
+                    b.HasOne("quandomeutimejoga_server.Models.Competition", "Competition")
+                        .WithMany("CompetitionTeams")
+                        .HasForeignKey("CompetitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("quandomeutimejoga_server.Models.Team", "Team")
+                        .WithMany("CompetitionTeams")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Competition");
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Organization", b =>
+                {
+                    b.HasOne("quandomeutimejoga_server.Models.Country", "Country")
+                        .WithMany("Organizations")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Team", b =>
+                {
+                    b.HasOne("quandomeutimejoga_server.Models.Country", "Country")
+                        .WithMany("Teams")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Competition", b =>
+                {
+                    b.Navigation("CompetitionTeams");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Country", b =>
+                {
+                    b.Navigation("Competitions");
+
+                    b.Navigation("Organizations");
+
+                    b.Navigation("Teams");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Organization", b =>
+                {
+                    b.Navigation("Competitions");
+                });
+
+            modelBuilder.Entity("quandomeutimejoga_server.Models.Team", b =>
+                {
+                    b.Navigation("CompetitionTeams");
                 });
 #pragma warning restore 612, 618
         }

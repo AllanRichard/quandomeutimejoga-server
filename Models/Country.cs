@@ -9,11 +9,7 @@ public class Country
     public int CountryCode { get; set; }
     public Continent Continent { get; set; }
 
-    public Country(Guid id, string name, int countryCode, Continent continent)
-    {
-        Id = id;
-        Name = name;
-        CountryCode = countryCode;
-        Continent = continent;
-    }
+    public IList<Organization> Organizations { get; set; } = new List<Organization>();
+    public IList<Competition> Competitions { get; set; } = new List<Competition>();
+    public IList<Team> Teams { get; set; } = new List<Team>();
 }

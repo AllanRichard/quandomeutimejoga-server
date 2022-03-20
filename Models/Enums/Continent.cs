@@ -2,10 +2,10 @@
 {
     public enum Continent
     {
-        Europe,
-        America,
-        Asia,
-        Oceania,
-        Antarctica
+        Europe = 1,
+        America = 2,
+        Asia = 3,
+        Oceania = 4,
+        Antarctica = 5
     }
 }
