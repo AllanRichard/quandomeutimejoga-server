@@ -43,7 +43,7 @@ namespace quandomeutimejoga_server.Data
             builder.Entity<Team>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
             builder.Entity<Team>().Property(p => p.FullName).IsRequired().HasMaxLength(150);
             builder.Entity<Team>().Property(p => p.ShortName).IsRequired().HasMaxLength(80);
-            builder.Entity<Team>().Property(p => p.Initials).IsRequired().HasMaxLength(5);
+            builder.Entity<Team>().Property(p => p.Initials).IsRequired().HasMaxLength(10);
             builder.Entity<Team>().Property(p => p.CountryId).IsRequired();
             // ==== End Config Team ==== //
 

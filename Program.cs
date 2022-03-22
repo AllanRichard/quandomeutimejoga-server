@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Http.Json;
 using quandomeutimejoga_server.Data;
+using System.Text.Json.Serialization;
+using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>();
 // Add services to the container.

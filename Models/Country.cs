@@ -5,7 +5,7 @@ namespace quandomeutimejoga_server.Models;
 public class Country
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public int CountryCode { get; set; }
     public Continent Continent { get; set; }
 
